@@ -1,0 +1,400 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════
+   ARTEMIX — SISTEMA DE DISEÑO
+   Dirección: 75% moderno · 25% futurista
+   El 75% lo aportan la retícula, el espacio negativo y la tipografía.
+   El 25% futurista vive SOLO en: glow del acento, retícula de fondo,
+   bordes con gradiente y micro-animaciones. Nunca en el texto de lectura.
+   ═══════════════════════════════════════════════════════════════ */
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ── Tokens semánticos ──────────────────────────────────────── */
+:root {
+  /* Tema claro */
+  --bg: #f5f7fa;
+  --bg-deep: #eaeff5;
+  --surface: #ffffff;
+  --surface-2: #eef2f7;
+  --border: #dbe3ec;
+  --border-strong: #c3cfdd;
+  --text: #0a1017;
+  --text-muted: #556879;
+  --text-faint: #7b8b9c;
+
+  --accent: #0284c7;
+  --accent-hi: #0ea5e9;
+  --accent-lo: #075985;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(2, 132, 199, 0.09);
+  --accent-glow: rgba(14, 165, 233, 0.22);
+
+  --grid-line: rgba(10, 16, 23, 0.055);
+  --shadow-color: 210deg 30% 60%;
+
+  --radius: 14px;
+  --radius-lg: 22px;
+}
+
+[data-theme="dark"] {
+  --bg: #06080b;
+  --bg-deep: #030507;
+  --surface: #0d1218;
+  --surface-2: #141b23;
+  --border: #1d2733;
+  --border-strong: #2b3846;
+  --text: #e9f0f7;
+  --text-muted: #94a6b8;
+  --text-faint: #64788c;
+
+  --accent: #22d3ee;
+  --accent-hi: #67e8f9;
+  --accent-lo: #0891b2;
+  --accent-contrast: #04141a;
+  --accent-soft: rgba(34, 211, 238, 0.1);
+  --accent-glow: rgba(34, 211, 238, 0.3);
+
+  --grid-line: rgba(140, 190, 220, 0.055);
+  --shadow-color: 200deg 60% 3%;
+}
+
+/* ── Exposición a Tailwind ──────────────────────────────────── */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-deep: var(--bg-deep);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-muted: var(--text-muted);
+  --color-faint: var(--text-faint);
+  --color-accent: var(--accent);
+  --color-accent-hi: var(--accent-hi);
+  --color-accent-lo: var(--accent-lo);
+  --color-accent-contrast: var(--accent-contrast);
+  --color-accent-soft: var(--accent-soft);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), var(--font-inter), sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", monospace;
+
+  --radius-card: var(--radius);
+  --radius-panel: var(--radius-lg);
+
+  --animate-marquee: marquee 44s linear infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-pulse-ring: pulse-ring 2.6s ease-out infinite;
+  --animate-shimmer: shimmer 2.8s linear infinite;
+  --animate-scan: scan 5s linear infinite;
+}
+
+/* ── Base ───────────────────────────────────────────────────── */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Compensa la barra fija al saltar a un ancla. */
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.028em;
+    line-height: 1.06;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-contrast);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Scrollbar discreta, coherente con el tema. */
+  ::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg-deep);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 99px;
+    border: 3px solid var(--bg-deep);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-lo);
+  }
+}
+
+/* ── Utilidades del sistema ─────────────────────────────────── */
+@layer utilities {
+  /* Contenedor maestro: un solo ancho para todo el sitio. */
+  .container-x {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .container-x {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Retícula técnica de fondo — el guiño futurista más barato y elegante. */
+  .bg-grid {
+    background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  .bg-grid-fade {
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  }
+
+  /* Texto con gradiente del acento. Úsalo en 1–2 palabras, no en frases largas. */
+  .text-gradient {
+    background: linear-gradient(135deg, var(--text) 0%, var(--text) 35%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .text-accent-gradient {
+    background: linear-gradient(120deg, var(--accent-hi), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Superficie estándar de tarjeta. */
+  .surface-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  /* Borde luminoso que aparece al hacer hover — 25% futurista contenido. */
+  .glow-border {
+    position: relative;
+    isolation: isolate;
+  }
+  .glow-border::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--accent), transparent 45%, transparent 55%, var(--accent-lo));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .glow-border:hover::before,
+  .glow-border[data-active="true"]::before {
+    opacity: 1;
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 0 1px var(--accent-soft), 0 12px 40px -12px var(--accent-glow);
+  }
+
+  .shadow-soft {
+    box-shadow:
+      0 1px 2px hsl(var(--shadow-color) / 0.06),
+      0 8px 24px -12px hsl(var(--shadow-color) / 0.16);
+  }
+
+  .shadow-lift {
+    box-shadow:
+      0 2px 4px hsl(var(--shadow-color) / 0.07),
+      0 24px 48px -20px hsl(var(--shadow-color) / 0.28);
+  }
+
+  /* Halo de luz ambiental detrás de secciones clave. */
+  .aurora {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .divider-glow {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-strong) 20%, var(--accent) 50%, var(--border-strong) 80%, transparent);
+    opacity: 0.6;
+  }
+
+  /* Cinta infinita de logos. */
+  .marquee-mask {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* Cuerpo de las páginas legales. Medida de línea corta y jerarquía clara:
+     son textos largos que la gente escanea, no lee de corrido. */
+  .legal-body h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-top: 2.75rem;
+    margin-bottom: 0.9rem;
+  }
+  .legal-body h2:first-child {
+    margin-top: 0;
+  }
+  .legal-body p,
+  .legal-body li {
+    color: var(--text-muted);
+    line-height: 1.75;
+    font-size: 1rem;
+  }
+  .legal-body p {
+    margin-bottom: 1.1rem;
+  }
+  .legal-body ul {
+    list-style: none;
+    margin: 0 0 1.4rem;
+    padding: 0;
+  }
+  .legal-body li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.7rem;
+  }
+  .legal-body li::before {
+    content: "";
+    position: absolute;
+    left: 0.25rem;
+    top: 0.72em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .legal-body strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .legal-body a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .noise {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  }
+}
+
+/* ── Keyframes ──────────────────────────────────────────────── */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(1000%);
+    opacity: 0;
+  }
+}
+
+/* ── Accesibilidad: respeta a quien pide menos movimiento ───── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
