@@ -41,8 +41,13 @@ export const contact = {
    */
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "50259468366",
 
-  email: "contacto@artemixsa.com", // ⚠️ EDITAR — debe existir antes de publicar
-  salesEmail: "ventas@artemixsa.com", // ⚠️ EDITAR
+  /**
+   * Correo visible en el sitio y destino de las cotizaciones.
+   * Si más adelante creas buzones genéricos (contacto@ / ventas@), cámbialos
+   * aquí: se ven más institucionales que un correo personal.
+   */
+  email: "erick.velasquez@artemixsa.com",
+  salesEmail: "erick.velasquez@artemixsa.com",
   phone: "+502 5946 8366",
   address: "Ciudad de Guatemala, Guatemala", // ⚠️ EDITAR si tienes dirección fiscal
   /** Horario mostrado junto al bloque de contacto. */
