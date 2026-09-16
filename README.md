@@ -116,21 +116,33 @@ git push -u origin main
 
 ## 5. Publicar en Vercel
 
+El dominio del proyecto es **artemixsa.com**.
+
 1. Entra a [vercel.com/new](https://vercel.com/new) e importa el repositorio.
 2. Vercel detecta Next.js solo: no cambies los ajustes de build.
-3. En **Environment Variables**, añade las del punto 3.
+3. En **Environment Variables**, añade las del punto 3 —`NEXT_PUBLIC_SITE_URL`
+   debe ser exactamente `https://artemixsa.com`, sin barra final.
 4. **Deploy**. En unos dos minutos tendrás una URL `*.vercel.app`.
 
-### Conectar tu dominio
+### Conectar el dominio
 
-En el proyecto de Vercel → **Settings → Domains** → añade `artemix.com`. Vercel te
-indica los registros DNS que debes crear en tu proveedor:
+En el proyecto de Vercel → **Settings → Domains** → añade `artemixsa.com`.
+
+Si el dominio ya está en tu cuenta de Vercel pero asignado a otro proyecto, quítalo de
+ese primero: un dominio solo puede apuntar a un proyecto a la vez.
+
+Cuando compraste el dominio a través de Vercel, el DNS ya está configurado y no tienes
+que tocar nada más. Si está registrado en otro proveedor, Vercel te indicará los
+registros a crear:
 
 - Dominio raíz: registro `A` → `76.76.21.21`
 - `www`: registro `CNAME` → `cname.vercel-dns.com`
 
-El certificado HTTPS se emite solo. Después actualiza `NEXT_PUBLIC_SITE_URL` con el
-dominio definitivo y vuelve a desplegar.
+El certificado HTTPS se emite solo en cuanto el DNS propaga.
+
+> Elige una versión canónica: o `artemixsa.com` o `www.artemixsa.com`. En Vercel se
+> marca una como principal y la otra queda redirigiendo. Tener las dos activas sin
+> redirección divide la autoridad SEO entre ambas.
 
 A partir de ahí, cada `git push` a `main` publica automáticamente, y cada pull request
 genera una URL de vista previa para revisar cambios antes de que salgan al aire.

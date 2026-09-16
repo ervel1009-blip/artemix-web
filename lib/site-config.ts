@@ -15,7 +15,7 @@ export const site = {
   description:
     "Desarrollamos software a medida, plataformas SaaS, diseñamos redes empresariales y equipamos tu infraestructura de cómputo. Cotiza tu proyecto en minutos.",
 
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://artemix.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://artemixsa.com",
   locale: "es_MX", // ⚠️ EDITAR según tu país: es_MX, es_PE, es_CO, es_CL...
 
   /** Moneda usada en el cotizador y el catálogo. */
@@ -37,16 +37,16 @@ export const contact = {
    */
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "521234567890",
 
-  email: "contacto@artemix.com", // ⚠️ EDITAR
-  salesEmail: "ventas@artemix.com", // ⚠️ EDITAR
+  email: "contacto@artemixsa.com", // ⚠️ EDITAR — debe existir antes de publicar
+  salesEmail: "ventas@artemixsa.com", // ⚠️ EDITAR
   phone: "+52 55 1234 5678", // ⚠️ EDITAR
   address: "Ciudad de México, México", // ⚠️ EDITAR
   /** Horario mostrado junto al bloque de contacto. */
   hours: "Lun a Vie · 9:00 – 19:00",
 
   social: {
-    linkedin: "https://linkedin.com/company/artemix", // ⚠️ EDITAR
-    github: "https://github.com/artemix", // ⚠️ EDITAR
+    linkedin: "https://linkedin.com/company/artemixsa", // ⚠️ EDITAR
+    github: "https://github.com/artemixsa", // ⚠️ EDITAR
     instagram: "", // deja "" para ocultar el icono
     x: "",
   },
