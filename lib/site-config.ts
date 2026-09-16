@@ -16,7 +16,7 @@ export const site = {
     "Desarrollamos software a medida, plataformas SaaS, diseñamos redes empresariales y equipamos tu infraestructura de cómputo. Cotiza tu proyecto en minutos.",
 
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://artemixsa.com",
-  locale: "es_MX", // ⚠️ EDITAR según tu país: es_MX, es_PE, es_CO, es_CL...
+  locale: "es_GT",
 
   /** Moneda usada en el cotizador y el catálogo. */
   currency: {
@@ -29,18 +29,16 @@ export const site = {
 
 export const contact = {
   /**
-   * ⚠️ EDITAR — WhatsApp en formato internacional SIN "+", espacios ni guiones.
-   * México:  52 + 1 + 10 dígitos  →  5215512345678
-   * Perú:    51 + 9 dígitos       →  51987654321
-   * Colombia:57 + 10 dígitos      →  573001234567
+   * WhatsApp en formato internacional SIN "+", espacios ni guiones.
+   * Guatemala: 502 + 8 dígitos → 50259468366
    * Se puede sobreescribir con la variable de entorno NEXT_PUBLIC_WHATSAPP.
    */
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "521234567890",
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "50259468366",
 
   email: "contacto@artemixsa.com", // ⚠️ EDITAR — debe existir antes de publicar
   salesEmail: "ventas@artemixsa.com", // ⚠️ EDITAR
-  phone: "+52 55 1234 5678", // ⚠️ EDITAR
-  address: "Ciudad de México, México", // ⚠️ EDITAR
+  phone: "+502 5946 8366",
+  address: "Ciudad de Guatemala, Guatemala", // ⚠️ EDITAR si tienes dirección fiscal
   /** Horario mostrado junto al bloque de contacto. */
   hours: "Lun a Vie · 9:00 – 19:00",
 

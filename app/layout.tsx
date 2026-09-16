@@ -90,8 +90,12 @@ const jsonLd = {
   url: site.url,
   email: contact.email,
   telephone: contact.phone,
-  address: { "@type": "PostalAddress", addressLocality: contact.address },
-  areaServed: "LATAM",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Ciudad de Guatemala",
+    addressCountry: "GT",
+  },
+  areaServed: ["GT", "Centroamérica", "LATAM"],
   priceRange: "$$",
   sameAs: [contact.social.linkedin, contact.social.github].filter(Boolean),
   hasOfferCatalog: {

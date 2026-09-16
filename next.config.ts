@@ -3,6 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  /**
+   * Fija la raíz del proyecto. Hay otro package-lock.json en una carpeta
+   * superior (otro proyecto), y sin esto Next infiere esa carpeta como raíz
+   * del workspace y rastrea archivos ajenos al construir.
+   */
+  outputFileTracingRoot: __dirname,
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

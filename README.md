@@ -53,16 +53,12 @@ Casi todo el contenido vive en **`lib/site-config.ts`**. Busca los comentarios `
 
 ### El número de WhatsApp
 
-Es lo más importante. Va en formato internacional, **sin `+`, espacios ni guiones**:
+Configurado: **+502 5946 8366** (Guatemala).
 
-| País | Formato | Ejemplo |
-| --- | --- | --- |
-| México | `52` + `1` + 10 dígitos | `5215512345678` |
-| Perú | `51` + 9 dígitos | `51987654321` |
-| Colombia | `57` + 10 dígitos | `573001234567` |
-| Chile | `56` + 9 dígitos | `56912345678` |
-
-Ponlo en `lib/site-config.ts` o, mejor, en la variable de entorno `NEXT_PUBLIC_WHATSAPP`.
+Va en formato internacional, **sin `+`, espacios ni guiones** → `50259468366`. Está en
+`lib/site-config.ts` y puede sobreescribirse con la variable de entorno
+`NEXT_PUBLIC_WHATSAPP`, que es lo recomendable en Vercel: así cambias el número sin
+tocar código ni volver a desplegar desde git.
 
 ### Logotipos de clientes
 
