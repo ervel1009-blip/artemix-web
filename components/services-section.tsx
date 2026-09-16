@@ -150,9 +150,11 @@ export function ServicesSection() {
                       </p>
                       <p className="mt-1 font-display text-xl font-bold text-accent">
                         {formatMoney(current.startingAt, site.currency.symbol)}
-                        <span className="ml-1 text-xs font-normal text-faint">
-                          {site.currency.suffix}
-                        </span>
+                        {site.currency.suffix && (
+                          <span className="ml-1 text-xs font-normal text-faint">
+                            {site.currency.suffix}
+                          </span>
+                        )}
                       </p>
                     </div>
                     <div>

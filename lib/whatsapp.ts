@@ -61,7 +61,7 @@ export function buildQuoteMessage(
     selectedAddons.length ? `*Complementos:* ${selectedAddons.join(", ")}` : `*Complementos:* ninguno`,
     urgency ? `*Plazo:* ${urgency.label}` : null,
     ``,
-    `*Inversión estimada:* ${formatMoney(result.min, symbol)} – ${formatMoney(result.max, symbol)} ${suffix}`,
+    `*Inversión estimada:* ${formatMoney(result.min, symbol)} – ${formatMoney(result.max, symbol)}${suffix ? ` ${suffix}` : ""}`,
     `*Tiempo estimado:* ${result.weeks[0]} – ${result.weeks[1]} semanas`,
     ``,
     `*Datos de contacto*`,

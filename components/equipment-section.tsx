@@ -168,9 +168,11 @@ function EquipmentCard({ item }: { item: EquipmentItem }) {
             </span>
             <span className="font-display text-xl font-bold">
               {formatMoney(item.price, site.currency.symbol)}
-              <span className="ml-1 text-xs font-normal text-faint">
-                {site.currency.suffix}
-              </span>
+              {site.currency.suffix && (
+                <span className="ml-1 text-xs font-normal text-faint">
+                  {site.currency.suffix}
+                </span>
+              )}
             </span>
           </div>
           <ButtonLink

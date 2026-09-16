@@ -4,7 +4,7 @@ import type { ServiceId } from "./services";
  * ════════════════════════════════════════════════════════════════
  *  MOTOR DE COTIZACIÓN
  * ════════════════════════════════════════════════════════════════
- *  Todos los montos están en la moneda definida en site.currency.
+ *  Todos los montos están en QUETZALES (GTQ).
  *  ⚠️ EDITAR — Ajusta `base`, `price` y los multiplicadores a tus
  *  costos reales. La lógica no necesita cambios.
  *
@@ -61,28 +61,28 @@ export const scopes: Record<ServiceId, ScopeOption[]> = {
       id: "landing",
       label: "Sitio web corporativo",
       description: "Sitio institucional o landing orientada a conversión, con CMS.",
-      base: 2800,
+      base: 21500,
       weeks: [3, 5],
     },
     {
       id: "webapp",
       label: "Aplicación web a medida",
       description: "Sistema con usuarios, roles, base de datos y lógica de negocio.",
-      base: 9500,
+      base: 74000,
       weeks: [8, 14],
     },
     {
       id: "mobile",
       label: "Aplicación móvil",
       description: "App iOS + Android con backend propio y publicación en tiendas.",
-      base: 14000,
+      base: 108000,
       weeks: [10, 16],
     },
     {
       id: "integration",
       label: "Integración o automatización",
       description: "Conectar sistemas existentes, APIs, migraciones y procesos automáticos.",
-      base: 4200,
+      base: 32500,
       weeks: [4, 8],
     },
   ],
@@ -91,21 +91,21 @@ export const scopes: Record<ServiceId, ScopeOption[]> = {
       id: "mvp",
       label: "MVP para validar",
       description: "Producto mínimo con onboarding, núcleo funcional y cobro de suscripción.",
-      base: 12000,
+      base: 93000,
       weeks: [10, 14],
     },
     {
       id: "platform",
       label: "Plataforma multi-tenant",
       description: "SaaS completo: organizaciones, roles, planes, facturación y métricas.",
-      base: 26000,
+      base: 200000,
       weeks: [16, 24],
     },
     {
       id: "migration",
       label: "Migrar producto existente a SaaS",
       description: "Llevar un sistema ya operando a un modelo cloud con suscripciones.",
-      base: 18000,
+      base: 140000,
       weeks: [12, 20],
     },
   ],
@@ -114,28 +114,28 @@ export const scopes: Record<ServiceId, ScopeOption[]> = {
       id: "small",
       label: "Oficina pequeña",
       description: "Hasta 25 puntos de red, un solo sitio.",
-      base: 2600,
+      base: 20000,
       weeks: [1, 2],
     },
     {
       id: "medium",
       label: "Empresa mediana",
       description: "25 a 100 puntos, VLANs, WiFi empresarial y seguridad perimetral.",
-      base: 8500,
+      base: 66000,
       weeks: [2, 4],
     },
     {
       id: "multisite",
       label: "Multi-sucursal",
       description: "Varias sedes enlazadas con VPN, políticas centralizadas y monitoreo.",
-      base: 19000,
+      base: 147000,
       weeks: [4, 8],
     },
     {
       id: "datacenter",
       label: "Site / datacenter",
       description: "Rack, redundancia, energía, climatización y alta disponibilidad.",
-      base: 32000,
+      base: 248000,
       weeks: [6, 12],
     },
   ],
@@ -144,28 +144,28 @@ export const scopes: Record<ServiceId, ScopeOption[]> = {
       id: "workstation",
       label: "Equipos de oficina",
       description: "Laptops y desktops para trabajo administrativo.",
-      base: 750,
+      base: 5800,
       weeks: [1, 2],
     },
     {
       id: "pro",
       label: "Estaciones de alto rendimiento",
       description: "Diseño, CAD, edición de video, desarrollo o modelado.",
-      base: 2100,
+      base: 16300,
       weeks: [1, 3],
     },
     {
       id: "server",
       label: "Servidores y almacenamiento",
       description: "Servidores, NAS y respaldo para infraestructura interna.",
-      base: 4800,
+      base: 37000,
       weeks: [2, 4],
     },
     {
       id: "netgear",
       label: "Equipamiento de red",
       description: "Switches, access points, firewalls y UPS.",
-      base: 1400,
+      base: 10800,
       weeks: [1, 3],
     },
   ],
@@ -175,35 +175,35 @@ export const scopes: Record<ServiceId, ScopeOption[]> = {
 export const addons: Record<ServiceId, AddonOption[]> = {
   software: [
     { id: "design", label: "Diseño UI/UX desde cero", description: "Investigación, wireframes y sistema de diseño propio.", percent: 0.25, weeks: 2 },
-    { id: "payments", label: "Pasarela de pagos", description: "Cobros con tarjeta, SPEI o transferencia.", price: 1600, weeks: 2 },
+    { id: "payments", label: "Pasarela de pagos", description: "Cobros con tarjeta, transferencia o débito.", price: 12400, weeks: 2 },
     { id: "mobileapp", label: "App móvil complementaria", description: "Versión iOS/Android del sistema.", percent: 0.6, weeks: 6 },
-    { id: "erp", label: "Integración con ERP/CRM", description: "SAP, Odoo, HubSpot, Salesforce u otro.", price: 2400, weeks: 3 },
-    { id: "bi", label: "Dashboard y reportería avanzada", description: "Tableros con KPIs y exportación.", price: 1900, weeks: 2 },
-    { id: "seo", label: "SEO técnico y analítica", description: "Optimización, schema, GA4 y eventos de conversión.", price: 900, weeks: 1 },
+    { id: "erp", label: "Integración con ERP/CRM", description: "SAP, Odoo, HubSpot, Salesforce u otro.", price: 18600, weeks: 3 },
+    { id: "bi", label: "Dashboard y reportería avanzada", description: "Tableros con KPIs y exportación.", price: 14700, weeks: 2 },
+    { id: "seo", label: "SEO técnico y analítica", description: "Optimización, schema, GA4 y eventos de conversión.", price: 7000, weeks: 1 },
     { id: "support", label: "Soporte y mantenimiento 12 meses", description: "Monitoreo, respaldos y bolsa de horas.", percent: 0.18 },
   ],
   saas: [
     { id: "design", label: "Diseño de producto y branding", description: "Identidad, sistema de diseño y flujos.", percent: 0.22, weeks: 3 },
-    { id: "billing", label: "Facturación y planes avanzados", description: "Prorrateo, cupones, trials y facturación fiscal.", price: 3200, weeks: 3 },
-    { id: "api", label: "API pública y webhooks", description: "Para que tus clientes integren tu producto.", price: 2800, weeks: 3 },
-    { id: "ai", label: "Módulo de IA", description: "Asistentes, búsqueda semántica o automatización con LLM.", price: 5500, weeks: 4 },
-    { id: "compliance", label: "Seguridad y cumplimiento", description: "Auditoría, cifrado, logs y preparación SOC2.", price: 4200, weeks: 4 },
-    { id: "devops", label: "Infraestructura escalable y CI/CD", description: "Autoescalado, observabilidad y despliegue continuo.", price: 3600, weeks: 2 },
+    { id: "billing", label: "Facturación y planes avanzados", description: "Prorrateo, cupones, trials y facturación FEL.", price: 24800, weeks: 3 },
+    { id: "api", label: "API pública y webhooks", description: "Para que tus clientes integren tu producto.", price: 21700, weeks: 3 },
+    { id: "ai", label: "Módulo de IA", description: "Asistentes, búsqueda semántica o automatización con LLM.", price: 42600, weeks: 4 },
+    { id: "compliance", label: "Seguridad y cumplimiento", description: "Auditoría, cifrado, logs y preparación SOC2.", price: 32500, weeks: 4 },
+    { id: "devops", label: "Infraestructura escalable y CI/CD", description: "Autoescalado, observabilidad y despliegue continuo.", price: 27900, weeks: 2 },
   ],
   redes: [
     { id: "cabling", label: "Cableado estructurado certificado", description: "Suministro, tendido y certificación de puntos.", percent: 0.4, weeks: 2 },
-    { id: "wifi", label: "WiFi de alta densidad", description: "Site survey y cobertura para muchos usuarios simultáneos.", price: 2800, weeks: 2 },
-    { id: "firewall", label: "Seguridad perimetral", description: "Firewall gestionado, filtrado y VPN.", price: 3400, weeks: 2 },
-    { id: "cctv", label: "Videovigilancia IP", description: "Cámaras, grabación y acceso remoto.", price: 2600, weeks: 2 },
+    { id: "wifi", label: "WiFi de alta densidad", description: "Site survey y cobertura para muchos usuarios simultáneos.", price: 21700, weeks: 2 },
+    { id: "firewall", label: "Seguridad perimetral", description: "Firewall gestionado, filtrado y VPN.", price: 26400, weeks: 2 },
+    { id: "cctv", label: "Videovigilancia IP", description: "Cámaras, grabación y acceso remoto.", price: 20200, weeks: 2 },
     { id: "monitor", label: "Monitoreo 24/7", description: "Alertas, tablero de estado y reporte mensual.", percent: 0.2 },
-    { id: "ups", label: "Respaldo de energía", description: "UPS y protección eléctrica dimensionada.", price: 1500, weeks: 1 },
+    { id: "ups", label: "Respaldo de energía", description: "UPS y protección eléctrica dimensionada.", price: 11600, weeks: 1 },
   ],
   equipos: [
-    { id: "setup", label: "Configuración e imagen corporativa", description: "Sistema, políticas y software listo por equipo.", price: 45 },
-    { id: "migration", label: "Migración de datos y usuarios", description: "Traspaso desde los equipos actuales.", price: 60 },
+    { id: "setup", label: "Configuración e imagen corporativa", description: "Sistema, políticas y software listo por equipo.", price: 350 },
+    { id: "migration", label: "Migración de datos y usuarios", description: "Traspaso desde los equipos actuales.", price: 470 },
     { id: "warranty", label: "Garantía extendida 3 años", description: "Cobertura del fabricante ampliada.", percent: 0.12 },
     { id: "onsite", label: "Soporte en sitio", description: "Atención presencial con SLA definido.", percent: 0.15 },
-    { id: "software", label: "Licenciamiento de software", description: "Microsoft 365, antivirus y ofimática.", price: 180 },
+    { id: "software", label: "Licenciamiento de software", description: "Microsoft 365, antivirus y ofimática.", price: 1400 },
   ],
 };
 
@@ -337,20 +337,31 @@ export function calculateQuote(sel: QuoteSelection): QuoteResult | null {
   const weekHigh = Math.max(weekLow + 1, Math.round((scope.weeks[1] + extraWeeks) * timeCompression));
 
   return {
-    min: roundTo(total * 0.85, 50),
-    max: roundTo(total * 1.2, 50),
+    min: roundTo(total * 0.85),
+    max: roundTo(total * 1.2),
     weeks: [weekLow, weekHigh],
     lines,
   };
 }
 
-function roundTo(value: number, step: number): number {
+/**
+ * Redondea a una cifra que se lea como precio comercial.
+ * El paso escala con el monto: en quetzales, un rango de "Q18,275 – Q25,842"
+ * parece calculado con calculadora; "Q18,500 – Q26,000" parece una propuesta.
+ */
+function roundTo(value: number): number {
+  const step = value >= 50000 ? 1000 : value >= 10000 ? 500 : 100;
   return Math.round(value / step) * step;
 }
 
-export function formatMoney(value: number, symbol = "$"): string {
-  // El signo va delante del símbolo: "−$157", no "$-157".
+/**
+ * El símbolo por defecto debe coincidir con `site.currency.symbol`.
+ * Se repite aquí a propósito: mantener este módulo sin dependencias permite
+ * ejecutarlo con `node` directamente desde scripts/check-pricing.mts.
+ */
+export function formatMoney(value: number, symbol = "Q"): string {
+  // El signo va delante del símbolo: "−Q157", no "Q-157".
   const rounded = Math.round(value);
   const sign = rounded < 0 ? "−" : "";
-  return `${sign}${symbol}${Math.abs(rounded).toLocaleString("es-MX")}`;
+  return `${sign}${symbol}${Math.abs(rounded).toLocaleString("es-GT")}`;
 }

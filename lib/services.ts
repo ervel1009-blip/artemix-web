@@ -36,7 +36,7 @@ export const services: Service[] = [
       "Garantía de 90 días",
     ],
     stack: ["Next.js", "React Native", "Node.js", "PostgreSQL", "Python"],
-    startingAt: 4500,
+    startingAt: 35000,
     timeline: "8 – 16 semanas",
   },
   {
@@ -54,7 +54,7 @@ export const services: Service[] = [
       "Infraestructura cloud y CI/CD",
     ],
     stack: ["Next.js", "Stripe", "Supabase", "AWS", "Vercel"],
-    startingAt: 9000,
+    startingAt: 70000,
     timeline: "10 – 14 semanas",
   },
   {
@@ -72,7 +72,7 @@ export const services: Service[] = [
       "Monitoreo y plan de contingencia",
     ],
     stack: ["Cisco", "Ubiquiti", "Fortinet", "MikroTik", "Zabbix"],
-    startingAt: 2200,
+    startingAt: 17000,
     timeline: "1 – 3 semanas",
   },
   {
@@ -90,7 +90,7 @@ export const services: Service[] = [
       "Soporte post-venta",
     ],
     stack: ["Dell", "HP", "Lenovo", "Apple", "Synology"],
-    startingAt: 600,
+    startingAt: 4500,
     timeline: "3 – 10 días hábiles",
   },
 ];

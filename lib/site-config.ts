@@ -18,12 +18,18 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://artemixsa.com",
   locale: "es_GT",
 
-  /** Moneda usada en el cotizador y el catálogo. */
+  /**
+   * Moneda del cotizador y el catálogo.
+   * En Guatemala la "Q" ya es inequívoca, por eso el sufijo va vacío: mostrar
+   * "Q21,500 GTQ" es redundante. Si algún día cotizas en dólares, cambia a
+   * { code: "USD", symbol: "$", suffix: "USD" } y convierte los montos de
+   * lib/pricing.ts, lib/services.ts y lib/catalog.ts.
+   */
   currency: {
-    code: "USD",
-    symbol: "$",
-    /** Sufijo mostrado junto a los montos, deja "" si no lo quieres. */
-    suffix: "USD",
+    code: "GTQ",
+    symbol: "Q",
+    /** Sufijo mostrado junto a los montos. Vacío = no se muestra. */
+    suffix: "",
   },
 } as const;
 

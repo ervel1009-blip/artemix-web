@@ -147,6 +147,14 @@ genera una URL de vista previa para revisar cambios antes de que salgan al aire.
 
 ## 6. Cómo funciona el cotizador
 
+Todos los montos del sitio están en **quetzales (GTQ)**. El símbolo `Q` se define en
+`site.currency` y los precios viven en tres archivos: `lib/pricing.ts` (cotizador),
+`lib/services.ts` (el "desde" de cada servicio) y `lib/catalog.ts` (equipos).
+
+> Los precios actuales son una conversión de referencia a razón de ~Q7.75 por dólar,
+> redondeada a cifras comerciales. **Revísalos contra tus costos reales antes de
+> publicar**, sobre todo los equipos, que dependen de tu costo de importación y margen.
+
 El motor está en `lib/pricing.ts`:
 
 ```

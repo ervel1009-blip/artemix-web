@@ -46,7 +46,9 @@ export function QuoteSummary({ result }: { result: QuoteResult | null }) {
                   {formatMoney(result.max, symbol)}
                 </span>
               </p>
-              <p className="mt-1.5 text-xs text-faint">{suffix} · antes de impuestos</p>
+              <p className="mt-1.5 text-xs text-faint">
+                {[suffix, "antes de impuestos"].filter(Boolean).join(" · ")}
+              </p>
 
               <p className="mt-5 flex items-center gap-2 text-sm text-muted">
                 <Clock3 className="h-4 w-4 text-accent" />
