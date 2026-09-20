@@ -143,33 +143,34 @@ export const scopes: Record<ServiceId, ScopeOption[]> = {
       weeks: [6, 12],
     },
   ],
+  /**
+   * Sin precio: el catálogo público está desactivado y el costo del hardware
+   * se mueve con el tipo de cambio y la disponibilidad del proveedor. Mostrar
+   * una cifra calculada aquí envejecería mal y comprometería la venta.
+   */
   equipos: [
     {
       id: "workstation",
       label: "Equipos de oficina",
       description: "Laptops y desktops para trabajo administrativo.",
-      base: 5800,
       weeks: [1, 2],
     },
     {
       id: "pro",
       label: "Estaciones de alto rendimiento",
       description: "Diseño, CAD, edición de video, desarrollo o modelado.",
-      base: 16300,
       weeks: [1, 3],
     },
     {
       id: "server",
       label: "Servidores y almacenamiento",
       description: "Servidores, NAS y respaldo para infraestructura interna.",
-      base: 37000,
       weeks: [2, 4],
     },
     {
       id: "netgear",
       label: "Equipamiento de red",
       description: "Switches, access points, firewalls y UPS.",
-      base: 10800,
       weeks: [1, 3],
     },
   ],

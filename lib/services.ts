@@ -41,7 +41,6 @@ export const services: Service[] = [
       "Garantía de 90 días",
     ],
     stack: ["Next.js", "React Native", "Node.js", "PostgreSQL", "Python"],
-    startingAt: 3000,
     timeline: "3 – 16 semanas",
   },
   {
@@ -93,7 +92,6 @@ export const services: Service[] = [
       "Soporte post-venta",
     ],
     stack: ["Dell", "HP", "Lenovo", "Apple", "Synology"],
-    startingAt: 4500,
     timeline: "3 – 10 días hábiles",
   },
 ];

@@ -48,7 +48,7 @@ Casi todo el contenido vive en **`lib/site-config.ts`**. Busca los comentarios `
 | Preguntas frecuentes | `lib/site-config.ts` → `faqs` |
 | Descripción de los 4 servicios | `lib/services.ts` |
 | **Precios del cotizador** | `lib/pricing.ts` |
-| Catálogo de equipos | `lib/catalog.ts` |
+| Catálogo de equipos *(sección desactivada)* | `lib/catalog.ts` |
 | Textos legales | `app/privacidad/`, `app/terminos/` |
 
 ### El número de WhatsApp
@@ -162,10 +162,12 @@ No todos los servicios muestran cifras, y es deliberado:
 | Servicio | Qué ve el cliente |
 | --- | --- |
 | **Sitio web** | Rango de precio: ≈Q3,000 sencillo · ≈Q6,000 estándar · ≈Q8,000+ avanzado |
-| **Equipos de cómputo** | Precio de catálogo por equipo |
 | App web a medida, app móvil, integraciones | "Cotización a la medida" |
 | Aplicaciones SaaS | "Cotización a la medida" |
 | Diseño de redes | "Cotización a la medida" |
+| Equipos de cómputo | "Cotización a la medida" |
+
+El sitio web es **el único alcance con precio visible** en todo el sitio.
 
 En los alcances sin precio el wizard **sigue funcionando igual**: captura
 requerimientos, complementos, plazo y datos de contacto, y muestra el tiempo
@@ -175,6 +177,17 @@ SaaS o una red multi-sucursal no informa, compromete.
 **Para quitar o poner precio a un alcance**, en `lib/pricing.ts` basta con añadir o
 borrar su campo `base`. La interfaz se adapta sola: oculta los importes de los
 complementos, el recargo por urgencia y cambia el panel lateral.
+
+### La sección de equipos está desactivada
+
+El catálogo de hardware con precios **no se muestra**: la venta de equipos se atiende
+por cotización, porque el costo se mueve con el tipo de cambio y la disponibilidad del
+proveedor. Los equipos siguen presentes como servicio y dentro del cotizador.
+
+Para reactivar la vitrina: en `app/page.tsx` descomenta `<EquipmentSection />` y su
+import, devuelve `{ label: "Equipos", href: "#equipos" }` a `navLinks` en
+`lib/site-config.ts`, y añade de nuevo el campo `base` a los alcances de `equipos` en
+`lib/pricing.ts`. El componente y los doce equipos de ejemplo siguen en el repo.
 
 ### El cálculo
 

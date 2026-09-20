@@ -65,18 +65,14 @@ if (conExtras?.kind === "estimate") {
 // ── 2. Todo lo demás debe ser "a medida" ──────────────────────
 console.log("\n▸ PROYECTOS A MEDIDA — sin cifras\n");
 
-const aMedida: { service: QuoteSelection["service"]; scope: string }[] = [
-  { service: "software", scope: "webapp" },
-  { service: "software", scope: "mobile" },
-  { service: "software", scope: "integration" },
-  { service: "saas", scope: "mvp" },
-  { service: "saas", scope: "platform" },
-  { service: "saas", scope: "migration" },
-  { service: "redes", scope: "small" },
-  { service: "redes", scope: "medium" },
-  { service: "redes", scope: "multisite" },
-  { service: "redes", scope: "datacenter" },
-];
+// El sitio web es el ÚNICO alcance con precio en todo el cotizador.
+const aMedida: { service: QuoteSelection["service"]; scope: string }[] = Object.entries(
+  scopes
+).flatMap(([service, list]) =>
+  list
+    .filter((s) => !(service === "software" && s.id === "landing"))
+    .map((s) => ({ service: service as QuoteSelection["service"], scope: s.id }))
+);
 
 for (const c of aMedida) {
   const r = calculateQuote({
@@ -97,8 +93,8 @@ for (const c of aMedida) {
   if (hasPricing(c.service, c.scope)) fail(`${label}: hasPricing debería ser false`);
 }
 
-// ── 3. Equipos conservan precio ───────────────────────────────
-console.log("\n▸ EQUIPOS — conservan precio\n");
+// ── 3. Equipos: sin catálogo público, también se cotizan ──────
+console.log("\n▸ EQUIPOS — sin precio de vitrina\n");
 
 const equipos = calculateQuote({
   service: "equipos",
@@ -107,10 +103,11 @@ const equipos = calculateQuote({
   addons: ["setup", "migration"],
   urgency: "normal",
 });
-if (equipos?.kind === "estimate") {
-  console.log(`   6 a 20 equipos: ${formatMoney(equipos.min)} – ${formatMoney(equipos.max)}`);
+if (equipos?.kind === "custom") {
+  console.log(`   6 a 20 equipos: a medida · ${equipos.weeks[0]}–${equipos.weeks[1]} sem`);
+  console.log(`   resumen: ${equipos.summary.join(" · ")}`);
 } else {
-  fail("Los equipos deberían conservar precio");
+  fail("Los equipos no deberían mostrar precio calculado");
 }
 
 // ── 4. Invariantes ────────────────────────────────────────────
