@@ -14,8 +14,13 @@ export type Service = {
   deliverables: string[];
   /** Stack o marcas, para dar credibilidad técnica. */
   stack: string[];
-  /** Punto de entrada de precio, se muestra como "Desde". */
-  startingAt: number;
+  /**
+   * Punto de entrada de precio, se muestra como "Desde".
+   * Omitirlo muestra "A cotizar": es lo correcto en servicios cuyo costo
+   * depende del diagnóstico (SaaS, redes), donde una cifra de entrada
+   * engañaría más de lo que orienta.
+   */
+  startingAt?: number;
   /** Rango típico de duración. */
   timeline: string;
 };
@@ -36,8 +41,8 @@ export const services: Service[] = [
       "Garantía de 90 días",
     ],
     stack: ["Next.js", "React Native", "Node.js", "PostgreSQL", "Python"],
-    startingAt: 35000,
-    timeline: "8 – 16 semanas",
+    startingAt: 3000,
+    timeline: "3 – 16 semanas",
   },
   {
     id: "saas",
@@ -54,7 +59,6 @@ export const services: Service[] = [
       "Infraestructura cloud y CI/CD",
     ],
     stack: ["Next.js", "Stripe", "Supabase", "AWS", "Vercel"],
-    startingAt: 70000,
     timeline: "10 – 14 semanas",
   },
   {
@@ -72,7 +76,6 @@ export const services: Service[] = [
       "Monitoreo y plan de contingencia",
     ],
     stack: ["Cisco", "Ubiquiti", "Fortinet", "MikroTik", "Zabbix"],
-    startingAt: 17000,
     timeline: "1 – 3 semanas",
   },
   {

@@ -17,6 +17,7 @@ import {
   calculateQuote,
   emptySelection,
   formatMoney,
+  hasPricing,
   scopes,
   sizes,
   urgencies,
@@ -55,6 +56,9 @@ export function QuoteWizard() {
   const [errorMsg, setErrorMsg] = useState("");
 
   const result = useMemo(() => calculateQuote(sel), [sel]);
+  // Los importes de complementos y recargos solo se muestran donde hay precio
+  // de lista; en un proyecto a medida serían cifras sin contexto.
+  const showAmounts = hasPricing(sel.service, sel.scope);
 
   // Cambiar de servicio invalida alcance, complementos y dimensión.
   function pickService(id: ServiceId) {
@@ -147,11 +151,20 @@ export function QuoteWizard() {
         {result && (
           <p className="mt-7 inline-flex flex-col rounded-card border border-border bg-surface-2/60 px-6 py-4">
             <span className="text-[0.75rem] uppercase tracking-wider text-faint">
-              Tu estimación
+              {result.kind === "estimate" ? "Tu estimación" : "Tu proyecto"}
             </span>
             <span className="mt-1 font-display text-2xl font-bold text-accent-gradient">
-              {formatMoney(result.min, site.currency.symbol)} –{" "}
-              {formatMoney(result.max, site.currency.symbol)}
+              {result.kind === "estimate" ? (
+                <>
+                  {formatMoney(result.min, site.currency.symbol)} –{" "}
+                  {formatMoney(result.max, site.currency.symbol)}
+                </>
+              ) : (
+                "Cotización a la medida"
+              )}
+            </span>
+            <span className="mt-1 text-[0.8125rem] text-muted">
+              {result.weeks[0]}–{result.weeks[1]} semanas estimadas
             </span>
           </p>
         )}
@@ -309,9 +322,11 @@ export function QuoteWizard() {
                         selected={sel.addons.includes(addon.id)}
                         onSelect={() => toggleAddon(addon.id)}
                         meta={
-                          addon.price != null
-                            ? `+${formatMoney(addon.price, site.currency.symbol)}`
-                            : `+${Math.round((addon.percent ?? 0) * 100)}%`
+                          !showAmounts
+                            ? undefined
+                            : addon.price != null
+                              ? `+${formatMoney(addon.price, site.currency.symbol)}`
+                              : `+${Math.round((addon.percent ?? 0) * 100)}%`
                         }
                       />
                     ))}
@@ -323,7 +338,11 @@ export function QuoteWizard() {
               {step === 3 && (
                 <StepShell
                   title="¿Para cuándo lo necesitas?"
-                  hint="El plazo afecta el precio: la holgura abarata, la urgencia requiere equipo dedicado."
+                  hint={
+                    showAmounts
+                      ? "El plazo afecta el precio: la holgura abarata, la urgencia requiere equipo dedicado."
+                      : "Nos ayuda a reservar el equipo adecuado y a priorizar tu propuesta."
+                  }
                 >
                   <div className="grid gap-3">
                     {urgencies.map((u) => (
@@ -334,7 +353,7 @@ export function QuoteWizard() {
                         selected={sel.urgency === u.id}
                         onSelect={() => setSel((s) => ({ ...s, urgency: u.id }))}
                         meta={
-                          u.factor === 1
+                          !showAmounts || u.factor === 1
                             ? undefined
                             : u.factor > 1
                               ? `+${Math.round((u.factor - 1) * 100)}%`

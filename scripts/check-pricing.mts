@@ -3,11 +3,13 @@
  *   npm run check:pricing
  *
  * Ejecútalo cada vez que ajustes precios en lib/pricing.ts. Valida que los
- * rangos sean coherentes, que el desglose cuadre con el total y que subir la
- * urgencia nunca abarate el proyecto.
+ * rangos sean coherentes, que el desglose cuadre con el total, que subir la
+ * urgencia nunca abarate el proyecto y que los alcances sin precio de lista
+ * devuelvan una cotización a medida en lugar de una cifra inventada.
  */
 import {
   calculateQuote,
+  hasPricing,
   scopes,
   addons,
   sizes,
@@ -16,66 +18,112 @@ import {
   type QuoteSelection,
 } from "../lib/pricing.ts";
 
-const cases: { name: string; sel: QuoteSelection }[] = [
-  {
-    name: "SaaS · plataforma multi-tenant · Suite · IA + facturación · urgente",
-    sel: { service: "saas", scope: "platform", size: "l", addons: ["ai", "billing"], urgency: "urgent" },
-  },
-  {
-    name: "Software · sitio corporativo · simple · SEO · flexible",
-    sel: { service: "software", scope: "landing", size: "s", addons: ["seo"], urgency: "flexible" },
-  },
-  {
-    name: "Redes · oficina pequeña · 1 sitio · sin extras · normal",
-    sel: { service: "redes", scope: "small", size: "s", addons: [], urgency: "normal" },
-  },
-  {
-    name: "Equipos · oficina · 6-20 equipos · setup + migración",
-    sel: { service: "equipos", scope: "workstation", size: "q2", addons: ["setup", "migration"], urgency: "normal" },
-  },
-  {
-    name: "Servicio elegido sin alcance (debe devolver null)",
-    sel: { service: "software", scope: null, size: null, addons: [], urgency: null },
-  },
-];
-
 let failures = 0;
 const fail = (msg: string) => {
   console.log("   ✗ " + msg);
   failures++;
 };
 
-for (const c of cases) {
-  const r = calculateQuote(c.sel);
-  console.log("\n▸ " + c.name);
+// ── 1. Sitios web: los precios que ve el cliente ──────────────
+console.log("\n▸ SITIOS WEB — precios visibles\n");
 
-  if (!r) {
-    console.log("   → null (sin alcance definido)");
-    if (c.sel.scope !== null) fail("Se esperaba un resultado");
+const web = (size: string, extras: string[] = []): QuoteSelection => ({
+  service: "software",
+  scope: "landing",
+  size,
+  addons: extras,
+  urgency: "normal",
+});
+
+for (const size of sizes.software) {
+  const r = calculateQuote(web(size.id));
+  if (!r || r.kind !== "estimate") {
+    fail(`El sitio web ${size.label} debería tener precio`);
     continue;
   }
-
-  console.log(`   ${formatMoney(r.min)} – ${formatMoney(r.max)} · ${r.weeks[0]}–${r.weeks[1]} semanas`);
-  for (const l of r.lines) console.log(`     · ${l.label}: ${formatMoney(l.amount)}`);
-
-  if (!(r.min > 0 && r.max > r.min)) fail("Rango inválido");
-  if (!(r.weeks[0] >= 1 && r.weeks[1] > r.weeks[0])) fail("Cronograma inválido");
-
-  const sum = r.lines.reduce((a, l) => a + l.amount, 0);
-  if (sum < r.min * 0.98 || sum > r.max * 1.02) {
-    fail(`El desglose (${formatMoney(sum)}) no cuadra con el rango mostrado`);
-  }
+  console.log(
+    `   ${size.label.padEnd(12)} ${formatMoney(r.min)} – ${formatMoney(r.max)}   (${r.weeks[0]}–${r.weeks[1]} sem)`
+  );
 }
 
-// La urgencia nunca debe abaratar el proyecto.
-const base = { service: "software", scope: "webapp", size: "m", addons: [] } as const;
-const prices = urgencies.map((u) => calculateQuote({ ...base, addons: [], urgency: u.id })!.max);
-console.log("\n▸ Monotonía por urgencia: " + prices.map((p) => formatMoney(p)).join(" ≤ "));
-if (prices.some((p, i) => i > 0 && p < prices[i - 1])) {
+const conExtras = calculateQuote(web("m", ["ecommerce", "seo"]));
+if (conExtras?.kind === "estimate") {
+  console.log(
+    `\n   Estándar + tienda + SEO: ${formatMoney(conExtras.min)} – ${formatMoney(conExtras.max)}`
+  );
+  for (const l of conExtras.lines) {
+    console.log(`     · ${l.label}: ${formatMoney(l.amount)}`);
+  }
+  const sum = conExtras.lines.reduce((a, l) => a + l.amount, 0);
+  if (sum < conExtras.min * 0.98 || sum > conExtras.max * 1.02) {
+    fail(`El desglose (${formatMoney(sum)}) no cuadra con el rango mostrado`);
+  }
+} else {
+  fail("El sitio web con complementos debería dar una estimación");
+}
+
+// ── 2. Todo lo demás debe ser "a medida" ──────────────────────
+console.log("\n▸ PROYECTOS A MEDIDA — sin cifras\n");
+
+const aMedida: { service: QuoteSelection["service"]; scope: string }[] = [
+  { service: "software", scope: "webapp" },
+  { service: "software", scope: "mobile" },
+  { service: "software", scope: "integration" },
+  { service: "saas", scope: "mvp" },
+  { service: "saas", scope: "platform" },
+  { service: "saas", scope: "migration" },
+  { service: "redes", scope: "small" },
+  { service: "redes", scope: "medium" },
+  { service: "redes", scope: "multisite" },
+  { service: "redes", scope: "datacenter" },
+];
+
+for (const c of aMedida) {
+  const r = calculateQuote({
+    service: c.service,
+    scope: c.scope,
+    size: null,
+    addons: [],
+    urgency: "normal",
+  });
+  const label = `${c.service}/${c.scope}`;
+  if (!r) {
+    fail(`${label}: no devolvió resultado`);
+  } else if (r.kind !== "custom") {
+    fail(`${label}: NO debería mostrar precio`);
+  } else {
+    console.log(`   ${label.padEnd(24)} a medida · ${r.weeks[0]}–${r.weeks[1]} sem`);
+  }
+  if (hasPricing(c.service, c.scope)) fail(`${label}: hasPricing debería ser false`);
+}
+
+// ── 3. Equipos conservan precio ───────────────────────────────
+console.log("\n▸ EQUIPOS — conservan precio\n");
+
+const equipos = calculateQuote({
+  service: "equipos",
+  scope: "workstation",
+  size: "q2",
+  addons: ["setup", "migration"],
+  urgency: "normal",
+});
+if (equipos?.kind === "estimate") {
+  console.log(`   6 a 20 equipos: ${formatMoney(equipos.min)} – ${formatMoney(equipos.max)}`);
+} else {
+  fail("Los equipos deberían conservar precio");
+}
+
+// ── 4. Invariantes ────────────────────────────────────────────
+const base: QuoteSelection = { service: "software", scope: "landing", size: "m", addons: [], urgency: null };
+const precios = urgencies.map((u) => {
+  const r = calculateQuote({ ...base, urgency: u.id });
+  return r?.kind === "estimate" ? r.max : 0;
+});
+console.log("\n▸ Monotonía por urgencia: " + precios.map((p) => formatMoney(p)).join(" ≤ "));
+if (precios.some((p, i) => i > 0 && p < precios[i - 1])) {
   fail("El precio no crece de forma monótona con la urgencia");
 }
 
-// Todo servicio necesita alcances, tamaños y complementos definidos.
 for (const id of ["software", "saas", "redes", "equipos"] as const) {
   if (!scopes[id]?.length || !sizes[id]?.length || !addons[id]?.length) {
     fail(`Faltan datos de catálogo para el servicio "${id}"`);

@@ -146,14 +146,20 @@ export function ServicesSection() {
                   <div className="mt-8 grid grid-cols-2 gap-4 border-t border-border pt-6">
                     <div>
                       <p className="text-[0.75rem] uppercase tracking-wider text-faint">
-                        Desde
+                        {current.startingAt != null ? "Desde" : "Inversión"}
                       </p>
                       <p className="mt-1 font-display text-xl font-bold text-accent">
-                        {formatMoney(current.startingAt, site.currency.symbol)}
-                        {site.currency.suffix && (
-                          <span className="ml-1 text-xs font-normal text-faint">
-                            {site.currency.suffix}
-                          </span>
+                        {current.startingAt != null ? (
+                          <>
+                            {formatMoney(current.startingAt, site.currency.symbol)}
+                            {site.currency.suffix && (
+                              <span className="ml-1 text-xs font-normal text-faint">
+                                {site.currency.suffix}
+                              </span>
+                            )}
+                          </>
+                        ) : (
+                          "A cotizar"
                         )}
                       </p>
                     </div>

@@ -12,10 +12,13 @@ import type { ServiceId } from "./services";
  *    subtotal = base(alcance) × factorTamaño
  *             + Σ addons (monto fijo o % del base)
  *    total    = subtotal × factorUrgencia
- *    rango    = [total × 0.85, total × 1.20]
+ *    rango    = [total × 0.92, total × 1.15]
  *
- *  Se muestra un RANGO, no un precio cerrado: da una señal de costo
- *  honesta sin comprometerte antes del diagnóstico.
+ *  Se muestra un RANGO estrecho, no un precio cerrado: da una señal de
+ *  costo clara sin comprometerte antes del diagnóstico.
+ *
+ *  Los alcances SIN `base` no muestran cifras: devuelven un resultado de
+ *  tipo "custom" con el plazo estimado y el resumen de lo elegido.
  * ════════════════════════════════════════════════════════════════
  */
 
@@ -23,7 +26,16 @@ export type ScopeOption = {
   id: string;
   label: string;
   description: string;
-  base: number;
+  /**
+   * Precio base en quetzales. **Omitirlo marca el alcance como "cotización a
+   * medida"**: el wizard sigue capturando requerimientos y plazo, pero no
+   * muestra ninguna cifra.
+   *
+   * Se deja sin precio todo aquello cuyo costo depende del diagnóstico —un
+   * SaaS o una red multi-sucursal no tienen precio de lista— y se conserva
+   * donde el alcance es predecible: sitios web y equipos.
+   */
+  base?: number;
   /** Semanas estimadas, se usa para el resumen. */
   weeks: [number, number];
 };
@@ -58,31 +70,30 @@ export type UrgencyOption = {
 export const scopes: Record<ServiceId, ScopeOption[]> = {
   software: [
     {
+      // Único alcance de software con precio: el sitio web es el producto
+      // cuyo esfuerzo sí se puede acotar sin diagnóstico previo.
       id: "landing",
-      label: "Sitio web corporativo",
-      description: "Sitio institucional o landing orientada a conversión, con CMS.",
-      base: 21500,
+      label: "Sitio web",
+      description: "Sitio institucional o landing orientada a conversión, con gestor de contenido.",
+      base: 6000,
       weeks: [3, 5],
     },
     {
       id: "webapp",
       label: "Aplicación web a medida",
       description: "Sistema con usuarios, roles, base de datos y lógica de negocio.",
-      base: 74000,
       weeks: [8, 14],
     },
     {
       id: "mobile",
       label: "Aplicación móvil",
       description: "App iOS + Android con backend propio y publicación en tiendas.",
-      base: 108000,
       weeks: [10, 16],
     },
     {
       id: "integration",
       label: "Integración o automatización",
       description: "Conectar sistemas existentes, APIs, migraciones y procesos automáticos.",
-      base: 32500,
       weeks: [4, 8],
     },
   ],
@@ -91,21 +102,18 @@ export const scopes: Record<ServiceId, ScopeOption[]> = {
       id: "mvp",
       label: "MVP para validar",
       description: "Producto mínimo con onboarding, núcleo funcional y cobro de suscripción.",
-      base: 93000,
       weeks: [10, 14],
     },
     {
       id: "platform",
       label: "Plataforma multi-tenant",
       description: "SaaS completo: organizaciones, roles, planes, facturación y métricas.",
-      base: 200000,
       weeks: [16, 24],
     },
     {
       id: "migration",
       label: "Migrar producto existente a SaaS",
       description: "Llevar un sistema ya operando a un modelo cloud con suscripciones.",
-      base: 140000,
       weeks: [12, 20],
     },
   ],
@@ -114,28 +122,24 @@ export const scopes: Record<ServiceId, ScopeOption[]> = {
       id: "small",
       label: "Oficina pequeña",
       description: "Hasta 25 puntos de red, un solo sitio.",
-      base: 20000,
       weeks: [1, 2],
     },
     {
       id: "medium",
       label: "Empresa mediana",
       description: "25 a 100 puntos, VLANs, WiFi empresarial y seguridad perimetral.",
-      base: 66000,
       weeks: [2, 4],
     },
     {
       id: "multisite",
       label: "Multi-sucursal",
       description: "Varias sedes enlazadas con VPN, políticas centralizadas y monitoreo.",
-      base: 147000,
       weeks: [4, 8],
     },
     {
       id: "datacenter",
       label: "Site / datacenter",
       description: "Rack, redundancia, energía, climatización y alta disponibilidad.",
-      base: 248000,
       weeks: [6, 12],
     },
   ],
@@ -173,14 +177,17 @@ export const scopes: Record<ServiceId, ScopeOption[]> = {
 
 /** Paso 3 — Complementos, dependen del servicio. */
 export const addons: Record<ServiceId, AddonOption[]> = {
+  // Calibrados a la escala del sitio web, que es el único alcance de software
+  // con precio. En los alcances sin precio se siguen mostrando como casillas
+  // para capturar el requerimiento, pero sin importe.
   software: [
-    { id: "design", label: "Diseño UI/UX desde cero", description: "Investigación, wireframes y sistema de diseño propio.", percent: 0.25, weeks: 2 },
-    { id: "payments", label: "Pasarela de pagos", description: "Cobros con tarjeta, transferencia o débito.", price: 12400, weeks: 2 },
-    { id: "mobileapp", label: "App móvil complementaria", description: "Versión iOS/Android del sistema.", percent: 0.6, weeks: 6 },
-    { id: "erp", label: "Integración con ERP/CRM", description: "SAP, Odoo, HubSpot, Salesforce u otro.", price: 18600, weeks: 3 },
-    { id: "bi", label: "Dashboard y reportería avanzada", description: "Tableros con KPIs y exportación.", price: 14700, weeks: 2 },
-    { id: "seo", label: "SEO técnico y analítica", description: "Optimización, schema, GA4 y eventos de conversión.", price: 7000, weeks: 1 },
-    { id: "support", label: "Soporte y mantenimiento 12 meses", description: "Monitoreo, respaldos y bolsa de horas.", percent: 0.18 },
+    { id: "design", label: "Diseño a la medida", description: "Sin plantillas: identidad propia, maquetas y revisiones.", percent: 0.25, weeks: 2 },
+    { id: "ecommerce", label: "Tienda en línea y pagos", description: "Catálogo, carrito y cobro con tarjeta o transferencia.", price: 2500, weeks: 2 },
+    { id: "cms", label: "Gestor de contenido o blog", description: "Para que edites textos e imágenes sin depender de nosotros.", price: 1200, weeks: 1 },
+    { id: "multilang", label: "Segundo idioma", description: "Versión completa del sitio en inglés u otro idioma.", price: 1500, weeks: 1 },
+    { id: "seo", label: "SEO técnico y analítica", description: "Optimización para Google, GA4 y eventos de conversión.", price: 1200, weeks: 1 },
+    { id: "integration", label: "Integración con otros sistemas", description: "CRM, facturación electrónica, inventario o API externa.", price: 2800, weeks: 2 },
+    { id: "support", label: "Hospedaje y mantenimiento 12 meses", description: "Dominio, alojamiento, respaldos y actualizaciones.", percent: 0.2 },
   ],
   saas: [
     { id: "design", label: "Diseño de producto y branding", description: "Identidad, sistema de diseño y flujos.", percent: 0.22, weeks: 3 },
@@ -212,11 +219,16 @@ export const addons: Record<ServiceId, AddonOption[]> = {
  * multiplica el precio unitario; en el resto representa la complejidad.
  */
 export const sizes: Record<ServiceId, SizeOption[]> = {
+  /**
+   * Los factores están calibrados sobre el sitio web (base Q6,000) para dar
+   * ≈Q3,000 sencillo · ≈Q6,000 estándar · ≈Q8,700 avanzado. En los alcances
+   * sin precio solo sirven para describir el tamaño del proyecto.
+   */
   software: [
-    { id: "s", label: "Simple", description: "Pocas pantallas, flujo directo, un tipo de usuario.", factor: 0.8 },
-    { id: "m", label: "Estándar", description: "Varios módulos y perfiles de usuario.", factor: 1 },
-    { id: "l", label: "Complejo", description: "Reglas de negocio densas y múltiples integraciones.", factor: 1.45 },
-    { id: "xl", label: "Crítico", description: "Alta concurrencia, auditoría y disponibilidad garantizada.", factor: 2 },
+    { id: "s", label: "Sencillo", description: "Una página o pocas secciones con contenido informativo.", factor: 0.5 },
+    { id: "m", label: "Estándar", description: "Varias secciones, blog o catálogo y formularios.", factor: 1 },
+    { id: "l", label: "Avanzado", description: "Muchas secciones, panel de administración e integraciones.", factor: 1.45 },
+    { id: "xl", label: "A la medida", description: "Área privada de clientes, multi-idioma o requisitos especiales.", factor: 2.2 },
   ],
   saas: [
     { id: "s", label: "Un solo módulo", description: "Producto enfocado en una función principal.", factor: 0.85 },
@@ -274,13 +286,27 @@ export type QuoteSelection = {
   urgency: string | null;
 };
 
-export type QuoteResult = {
-  min: number;
-  max: number;
-  weeks: [number, number];
-  /** Desglose legible para el resumen y el mensaje de WhatsApp. */
-  lines: { label: string; amount: number }[];
-};
+export type QuoteLine = { label: string; amount: number };
+
+/**
+ * Unión discriminada a propósito: obliga a que la interfaz resuelva de forma
+ * explícita el caso sin precio, en vez de mostrar un "Q0" por descuido.
+ */
+export type QuoteResult =
+  | {
+      kind: "estimate";
+      min: number;
+      max: number;
+      weeks: [number, number];
+      /** Desglose legible para el resumen y el mensaje de WhatsApp. */
+      lines: QuoteLine[];
+    }
+  | {
+      kind: "custom";
+      weeks: [number, number];
+      /** Resumen de lo elegido, sin importes. */
+      summary: string[];
+    };
 
 export const emptySelection: QuoteSelection = {
   service: null,
@@ -290,7 +316,13 @@ export const emptySelection: QuoteSelection = {
   urgency: null,
 };
 
-/** Calcula el rango estimado. Devuelve null si falta información. */
+/** Indica si un alcance tiene precio de lista o se cotiza tras diagnóstico. */
+export function hasPricing(service: ServiceId | null, scopeId: string | null): boolean {
+  if (!service || !scopeId) return false;
+  return scopes[service].find((s) => s.id === scopeId)?.base != null;
+}
+
+/** Calcula la estimación. Devuelve null si aún falta elegir servicio o alcance. */
 export function calculateQuote(sel: QuoteSelection): QuoteResult | null {
   if (!sel.service || !sel.scope) return null;
 
@@ -299,25 +331,57 @@ export function calculateQuote(sel: QuoteSelection): QuoteResult | null {
 
   const size = sizes[sel.service].find((s) => s.id === sel.size);
   const urgency = urgencies.find((u) => u.id === sel.urgency);
+  const chosenAddons = sel.addons
+    .map((id) => addons[sel.service!].find((a) => a.id === id))
+    .filter((a) => a != null);
 
-  const sizeFactor = size?.factor ?? 1;
   const urgencyFactor = urgency?.factor ?? 1;
+  const extraWeeks = chosenAddons.reduce((total, a) => total + (a.weeks ?? 0), 0);
 
+  /**
+   * El tamaño también mueve el cronograma: un sitio sencillo no puede tardar
+   * lo mismo que uno a la medida. Se usa la raíz del factor para amortiguar
+   * (duplicar el alcance no duplica el tiempo) y se acota, porque en equipos
+   * el "tamaño" es cantidad de unidades y su factor llega a 60.
+   */
+  const sizeTimeFactor = Math.min(1.6, Math.max(0.6, Math.sqrt(size?.factor ?? 1)));
+
+  // Los plazos acelerados comprimen el cronograma, no lo extienden.
+  const timeCompression = urgencyFactor >= 1.2 ? 0.75 : 1;
+  const scale = sizeTimeFactor * timeCompression;
+  const weekLow = Math.max(1, Math.round(scope.weeks[0] * scale + extraWeeks * 0.5));
+  const weekHigh = Math.max(weekLow + 1, Math.round(scope.weeks[1] * scale + extraWeeks));
+  const weeks: [number, number] = [weekLow, weekHigh];
+
+  // ── Alcance sin precio de lista ──
+  if (scope.base == null) {
+    return {
+      kind: "custom",
+      weeks,
+      summary: [
+        `${scope.label}${size ? ` · ${size.label}` : ""}`,
+        ...chosenAddons.map((a) => a.label),
+        ...(urgency ? [`Plazo: ${urgency.label}`] : []),
+      ],
+    };
+  }
+
+  // ── Alcance con precio ──
+  const sizeFactor = size?.factor ?? 1;
   const baseAmount = scope.base * sizeFactor;
-  const lines: { label: string; amount: number }[] = [
+  const lines: QuoteLine[] = [
     { label: `${scope.label}${size ? ` · ${size.label}` : ""}`, amount: baseAmount },
   ];
 
   let addonTotal = 0;
-  let extraWeeks = 0;
-
-  for (const id of sel.addons) {
-    const addon = addons[sel.service].find((a) => a.id === id);
-    if (!addon) continue;
+  for (const addon of chosenAddons) {
     // Los porcentajes se calculan sobre el base ya ajustado por tamaño.
-    const amount = addon.price != null ? addon.price * (sel.service === "equipos" ? sizeFactor : 1) : baseAmount * (addon.percent ?? 0);
+    // En equipos el precio es por unidad, así que escala con la cantidad.
+    const amount =
+      addon.price != null
+        ? addon.price * (sel.service === "equipos" ? sizeFactor : 1)
+        : baseAmount * (addon.percent ?? 0);
     addonTotal += amount;
-    extraWeeks += addon.weeks ?? 0;
     lines.push({ label: addon.label, amount });
   }
 
@@ -326,20 +390,16 @@ export function calculateQuote(sel: QuoteSelection): QuoteResult | null {
 
   if (urgencyFactor !== 1) {
     lines.push({
-      label: urgencyFactor > 1 ? `Prioridad: ${urgency?.label}` : `Descuento por plazo flexible`,
+      label: urgencyFactor > 1 ? `Prioridad: ${urgency?.label}` : "Descuento por plazo flexible",
       amount: subtotal * (urgencyFactor - 1),
     });
   }
 
-  // Los plazos acelerados comprimen el cronograma, no lo extienden.
-  const timeCompression = urgencyFactor >= 1.2 ? 0.75 : 1;
-  const weekLow = Math.max(1, Math.round((scope.weeks[0] + extraWeeks * 0.5) * timeCompression));
-  const weekHigh = Math.max(weekLow + 1, Math.round((scope.weeks[1] + extraWeeks) * timeCompression));
-
   return {
-    min: roundTo(total * 0.85),
-    max: roundTo(total * 1.2),
-    weeks: [weekLow, weekHigh],
+    kind: "estimate",
+    min: roundTo(total * 0.92),
+    max: roundTo(total * 1.15),
+    weeks,
     lines,
   };
 }

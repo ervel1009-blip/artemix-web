@@ -52,6 +52,13 @@ export function buildQuoteMessage(
 
   const { symbol, suffix } = site.currency;
 
+  // En un alcance sin precio de lista no se inventa una cifra: se marca como
+  // pendiente de cotizar para que el seguimiento comercial lo trate así.
+  const inversion =
+    result.kind === "estimate"
+      ? `${formatMoney(result.min, symbol)} – ${formatMoney(result.max, symbol)}${suffix ? ` ${suffix}` : ""}`
+      : "A cotizar tras diagnóstico";
+
   const lines = [
     `*Nueva cotización — ${site.name}*`,
     ``,
@@ -61,7 +68,7 @@ export function buildQuoteMessage(
     selectedAddons.length ? `*Complementos:* ${selectedAddons.join(", ")}` : `*Complementos:* ninguno`,
     urgency ? `*Plazo:* ${urgency.label}` : null,
     ``,
-    `*Inversión estimada:* ${formatMoney(result.min, symbol)} – ${formatMoney(result.max, symbol)}${suffix ? ` ${suffix}` : ""}`,
+    `*Inversión estimada:* ${inversion}`,
     `*Tiempo estimado:* ${result.weeks[0]} – ${result.weeks[1]} semanas`,
     ``,
     `*Datos de contacto*`,

@@ -155,16 +155,40 @@ Todos los montos del sitio están en **quetzales (GTQ)**. El símbolo `Q` se def
 > redondeada a cifras comerciales. **Revísalos contra tus costos reales antes de
 > publicar**, sobre todo los equipos, que dependen de tu costo de importación y margen.
 
-El motor está en `lib/pricing.ts`:
+### Qué lleva precio y qué no
+
+No todos los servicios muestran cifras, y es deliberado:
+
+| Servicio | Qué ve el cliente |
+| --- | --- |
+| **Sitio web** | Rango de precio: ≈Q3,000 sencillo · ≈Q6,000 estándar · ≈Q8,000+ avanzado |
+| **Equipos de cómputo** | Precio de catálogo por equipo |
+| App web a medida, app móvil, integraciones | "Cotización a la medida" |
+| Aplicaciones SaaS | "Cotización a la medida" |
+| Diseño de redes | "Cotización a la medida" |
+
+En los alcances sin precio el wizard **sigue funcionando igual**: captura
+requerimientos, complementos, plazo y datos de contacto, y muestra el tiempo
+estimado. Solo omite el dinero. Una cifra puesta antes de entender el alcance de un
+SaaS o una red multi-sucursal no informa, compromete.
+
+**Para quitar o poner precio a un alcance**, en `lib/pricing.ts` basta con añadir o
+borrar su campo `base`. La interfaz se adapta sola: oculta los importes de los
+complementos, el recargo por urgencia y cambia el panel lateral.
+
+### El cálculo
 
 ```
 subtotal = base(alcance) × factorTamaño + Σ complementos
 total    = subtotal × factorUrgencia
-rango    = [total × 0.85 , total × 1.20]
+rango    = [total × 0.92 , total × 1.15]
 ```
 
-Se muestra un **rango**, no un precio cerrado: da una señal de costo honesta sin
-comprometerte antes del diagnóstico.
+Se muestra un **rango estrecho**, no un precio cerrado: da una señal de costo clara
+sin comprometerte antes del diagnóstico.
+
+El plazo también escala con el tamaño (raíz del factor, acotada), para que un sitio
+sencillo no anuncie el mismo tiempo que uno a la medida.
 
 Para ajustar precios toca solo los números (`base`, `price`, `percent`, `factor`) y
 después ejecuta:
