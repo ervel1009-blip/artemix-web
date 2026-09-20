@@ -1,4 +1,6 @@
 import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { site } from "@/lib/site-config";
 
 /**
@@ -11,6 +13,12 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function Image() {
+  // El renderizador corre en el servidor y no resuelve rutas públicas, así
+  // que el monograma se incrusta como data URI. Tiene que ser PNG: Satori no
+  // admite WebP y falla con "u2 is not iterable".
+  const mark = await readFile(join(process.cwd(), "public", "logo-mark.png"));
+  const markSrc = `data:image/png;base64,${mark.toString("base64")}`;
+
   return new ImageResponse(
     (
       <div
@@ -42,12 +50,9 @@ export default async function Image() {
         />
 
         {/* Marca */}
-        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <svg width="56" height="56" viewBox="0 0 32 32" fill="none">
-            <path d="M16 2.5 28.5 29h-5.9L16 13.9 9.4 29H3.5L16 2.5Z" fill="#22d3ee" />
-            <path d="M11.1 22.6h9.8" stroke="#06080b" strokeWidth="2.1" strokeLinecap="round" />
-            <circle cx="16" cy="19.5" r="1.9" fill="#67e8f9" />
-          </svg>
+        <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={markSrc} alt="" width={116} height={68} />
           <span
             style={{
               fontSize: 44,

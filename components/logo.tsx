@@ -1,14 +1,18 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { site } from "@/lib/site-config";
 
 /**
  * Marca de ARTEMIX.
- * La "A" angular remite al arco de Artemisa y, girada, al vértice de una
- * topología de red. Se dibuja en SVG para que escale y herede el acento
- * del tema activo — sin archivos de imagen que mantener.
  *
- * ⚠️ Si ya tienes un logotipo profesional, sustituye este componente por
- *    un <Image src="/logo.svg" .../> y conserva la misma firma de props.
+ * El logotipo original es una composición cuadrada con fondo espacial, el
+ * monograma AM y los textos "ARTEMIX" y "S.A.". A 36 px de alto esos textos
+ * serían ilegibles, así que aquí se usa solo el monograma —recortado y con
+ * fondo transparente— dentro de un contenedor oscuro, y el nombre se compone
+ * en tipografía. El contenedor propio es lo que permite que la marca funcione
+ * igual en el tema claro, donde un monograma blanco quedaría invisible.
+ *
+ * El logotipo completo vive en /public/logo-artemix.webp para usos grandes.
  */
 export function Logo({
   className,
@@ -19,31 +23,16 @@ export function Logo({
 }) {
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
-      <svg
-        viewBox="0 0 32 32"
-        className="h-8 w-8 shrink-0"
-        fill="none"
-        aria-hidden="true"
-      >
-        <defs>
-          <linearGradient id="artemix-mark" x1="4" y1="28" x2="28" y2="4">
-            <stop offset="0%" stopColor="var(--accent-lo)" />
-            <stop offset="55%" stopColor="var(--accent)" />
-            <stop offset="100%" stopColor="var(--accent-hi)" />
-          </linearGradient>
-        </defs>
-        <path
-          d="M16 2.5 28.5 29h-5.9L16 13.9 9.4 29H3.5L16 2.5Z"
-          fill="url(#artemix-mark)"
+      <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-[0.7rem] bg-[#0a0c1a] ring-1 ring-inset ring-white/10">
+        <Image
+          src="/logo-mark.png"
+          alt=""
+          width={300}
+          height={176}
+          priority
+          className="h-auto w-[1.85rem]"
         />
-        <path
-          d="M11.1 22.6h9.8"
-          stroke="var(--bg)"
-          strokeWidth="2.1"
-          strokeLinecap="round"
-        />
-        <circle cx="16" cy="19.5" r="1.9" fill="var(--accent-hi)" />
-      </svg>
+      </span>
       {withWordmark && (
         <span className="font-display text-[1.35rem] font-bold tracking-[-0.03em]">
           {site.name}

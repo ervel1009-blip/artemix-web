@@ -40,6 +40,7 @@ Casi todo el contenido vive en **`lib/site-config.ts`**. Busca los comentarios `
 | Qué | Dónde |
 | --- | --- |
 | Nombre, razón social, URL, moneda | `lib/site-config.ts` → `site` |
+| Logotipo | `public/` y `app/icon.png` — ver más abajo |
 | **WhatsApp, correo, teléfono, dirección** | `lib/site-config.ts` → `contact` |
 | Métricas del hero (proyectos, años, clientes) | `lib/site-config.ts` → `metrics` |
 | **Clientes y marcas con las que trabajaste** | `lib/site-config.ts` → `clients` |
@@ -59,6 +60,26 @@ Va en formato internacional, **sin `+`, espacios ni guiones** → `50259468366`.
 `lib/site-config.ts` y puede sobreescribirse con la variable de entorno
 `NEXT_PUBLIC_WHATSAPP`, que es lo recomendable en Vercel: así cambias el número sin
 tocar código ni volver a desplegar desde git.
+
+### El logotipo
+
+El original es una composición cuadrada: fondo espacial, monograma AM y los textos
+"ARTEMIX" y "S.A.". A 36 px de alto esos textos son ilegibles, así que se usa por
+partes:
+
+| Archivo | Para qué | Cómo se obtuvo |
+| --- | --- | --- |
+| `public/logo-mark.png` | Navbar, pie e imagen social | Monograma recortado, fondo hecho transparente |
+| `app/icon.png` | Favicon | Solo la "A": el "AM" completo se empasta a 16 px |
+| `public/logo-artemix.webp` | Usos grandes | Logotipo completo |
+
+El monograma va dentro de un contenedor oscuro con esquinas redondeadas
+(`components/logo.tsx`), y el nombre se compone en tipografía al lado. Ese contenedor
+no es decorativo: el monograma es casi blanco y sin él desaparecería en el tema claro.
+
+> `logo-mark.png` **debe seguir siendo PNG**. La imagen social se genera con Satori,
+> que no admite WebP y falla con `u2 is not iterable`. En el navegador no importa:
+> `next/image` la reoptimiza a WebP al servirla.
 
 ### Logotipos de clientes
 
