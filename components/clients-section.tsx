@@ -15,9 +15,9 @@ export function ClientsSection() {
         />
 
         {/* Rejilla de clientes */}
-        {/* 2 y 4 columnas, nunca 3: con una lista par, tres columnas dejan una
-            celda vacía que se lee como un logo que falta. */}
-        <div className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-panel border border-border bg-border lg:grid-cols-4">
+        {/* Columnas = número de clientes: cualquier celda vacía en la rejilla
+            se lee como un logo que falta. Ajustar al cambiar `clients`. */}
+        <div className="mt-16 grid grid-cols-1 gap-px overflow-hidden rounded-panel border border-border bg-border sm:grid-cols-3">
           {clients.map((client, i) => (
             <Reveal key={client.name} delay={i * 0.04}>
               <div className="group relative flex h-full min-h-[8.5rem] flex-col items-center justify-center gap-2 bg-bg px-5 py-8 transition-colors duration-300 hover:bg-surface">
@@ -46,8 +46,9 @@ export function ClientsSection() {
           ))}
         </div>
 
-        {/* Testimonios */}
-        <div className="mt-20 grid gap-6 md:grid-cols-3">
+        {/* Testimonios. Las columnas siguen a la cantidad real, por lo mismo
+            que la rejilla de arriba. */}
+        <div className="mt-20 grid gap-6 md:grid-cols-2">
           {testimonials.map((t, i) => (
             <Reveal key={t.author + i} delay={i * 0.1}>
               <figure className="surface-card glow-border flex h-full flex-col p-7">

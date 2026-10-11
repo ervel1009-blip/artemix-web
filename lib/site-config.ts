@@ -64,7 +64,7 @@ export const contact = {
 /** Métricas del hero. Números que respaldan la venta. */
 export const metrics = [
   { value: 120, suffix: "+", label: "Proyectos entregados" }, // ⚠️ EDITAR
-  { value: 8, suffix: " años", label: "De experiencia" }, // ⚠️ EDITAR
+  { value: 5, suffix: " años", label: "De experiencia" },
   { value: 99.9, suffix: "%", label: "Uptime en producción", decimals: 1 },
   { value: 40, suffix: "+", label: "Clientes activos" }, // ⚠️ EDITAR
 ] as const;
@@ -83,15 +83,16 @@ export type Client = {
   sector?: string;
 };
 
+/**
+ * ⚠️ La rejilla de esta sección está fijada a 3 columnas en
+ * components/clients-section.tsx. Si cambias la cantidad de clientes, ajusta
+ * ahí las columnas para que no quede una celda vacía: un hueco en la rejilla
+ * se lee como un logo que falta.
+ */
 export const clients: Client[] = [
+  { name: "COMERRSA", logo: null, sector: "" }, // ⚠️ EDITAR — añade su sector
   { name: "Grupo Rivera", logo: null, sector: "Retail" },
   { name: "LogiTrans", logo: null, sector: "Logística" },
-  { name: "Clínica Norte", logo: null, sector: "Salud" },
-  { name: "AgroSur", logo: null, sector: "Agroindustria" },
-  { name: "Banco Vertex", logo: null, sector: "Servicios financieros" },
-  { name: "EduCampus", logo: null, sector: "Educación" },
-  { name: "Metalix", logo: null, sector: "Manufactura" },
-  { name: "NexHotel", logo: null, sector: "Hotelería" },
 ];
 
 /**
@@ -110,7 +111,14 @@ export const partners: Client[] = [
   { name: "Fortinet", logo: null },
 ];
 
-/** Testimonios. Cada uno debe tener resultado medible, no adjetivos. */
+/**
+ * Testimonios. Cada uno debe tener resultado medible, no adjetivos.
+ *
+ * ⚠️ Un testimonio solo debe publicarse cuando la persona citada existe y
+ * autorizó la frase. Deja en esta lista únicamente los reales: la rejilla se
+ * adapta a dos o tres, y una sección con un testimonio verdadero convence
+ * más que tres inventados.
+ */
 export const testimonials = [
   {
     quote:
@@ -124,13 +132,6 @@ export const testimonials = [
       "Rediseñaron la red de nuestras tres sucursales. Pasamos de caídas semanales a cero incidentes en catorce meses.",
     author: "Nombre Apellido", // ⚠️ EDITAR
     role: "Gerente de TI, LogiTrans",
-    initials: "NA",
-  },
-  {
-    quote:
-      "Levantaron el MVP de nuestro SaaS en once semanas y nos acompañaron hasta los primeros 500 usuarios de pago.",
-    author: "Nombre Apellido", // ⚠️ EDITAR
-    role: "Fundadora, EduCampus",
     initials: "NA",
   },
 ] as const;
