@@ -61,12 +61,21 @@ export const contact = {
   },
 } as const;
 
-/** Métricas del hero. Números que respaldan la venta. */
+/**
+ * Métricas del hero. Números que respaldan la venta.
+ *
+ * Regla: solo cifras que puedas defender si un cliente pregunta. Aquí no hay
+ * una métrica de "clientes activos" a propósito —el número tendría que
+ * cuadrar con los proyectos entregados y con los logotipos que se muestran
+ * más abajo, y cualquier desajuste entre los tres se nota—. La garantía la
+ * sustituye bien: es verificable, es un compromiso y es lo que de verdad
+ * tranquiliza a quien va a contratar.
+ */
 export const metrics = [
-  { value: 120, suffix: "+", label: "Proyectos entregados" }, // ⚠️ EDITAR
+  { value: 10, suffix: "+", label: "Proyectos entregados" },
   { value: 5, suffix: " años", label: "De experiencia" },
   { value: 99.9, suffix: "%", label: "Uptime en producción", decimals: 1 },
-  { value: 40, suffix: "+", label: "Clientes activos" }, // ⚠️ EDITAR
+  { value: 90, suffix: " días", label: "De garantía incluida" },
 ] as const;
 
 /**
@@ -84,15 +93,15 @@ export type Client = {
 };
 
 /**
- * ⚠️ La rejilla de esta sección está fijada a 3 columnas en
- * components/clients-section.tsx. Si cambias la cantidad de clientes, ajusta
- * ahí las columnas para que no quede una celda vacía: un hueco en la rejilla
- * se lee como un logo que falta.
+ * Solo clientes reales. La rejilla se adapta sola a la cantidad, así que
+ * puedes añadir o quitar entradas sin tocar nada más.
+ *
+ * ⚠️ EDITAR — `sector` está vacío a propósito; complétalo cuando lo tengas.
+ * Usa el logotipo de un cliente únicamente si te autorizó a hacerlo.
  */
 export const clients: Client[] = [
-  { name: "COMERRSA", logo: null, sector: "" }, // ⚠️ EDITAR — añade su sector
-  { name: "Grupo Rivera", logo: null, sector: "Retail" },
-  { name: "LogiTrans", logo: null, sector: "Logística" },
+  { name: "COMERRSA", logo: null, sector: "" },
+  { name: "Refrigeración Corporativa PUNTUAL", logo: null, sector: "" },
 ];
 
 /**
@@ -119,22 +128,22 @@ export const partners: Client[] = [
  * adapta a dos o tres, y una sección con un testimonio verdadero convence
  * más que tres inventados.
  */
-export const testimonials = [
-  {
-    quote:
-      "Migramos nuestro sistema de inventario a la plataforma que desarrolló ARTEMIX y redujimos los tiempos de cierre mensual de 5 días a 4 horas.",
-    author: "Nombre Apellido", // ⚠️ EDITAR
-    role: "Director de Operaciones, Grupo Rivera",
-    initials: "NA",
-  },
-  {
-    quote:
-      "Rediseñaron la red de nuestras tres sucursales. Pasamos de caídas semanales a cero incidentes en catorce meses.",
-    author: "Nombre Apellido", // ⚠️ EDITAR
-    role: "Gerente de TI, LogiTrans",
-    initials: "NA",
-  },
-] as const;
+export const testimonials: {
+  quote: string;
+  author: string;
+  role: string;
+  initials: string;
+}[] = [
+  // Vacío mientras no haya testimonios reales: la sección entera se oculta
+  // sola. Para añadir uno, copia esta plantilla y bórrale los comentarios.
+  //
+  // {
+  //   quote: "Frase textual del cliente, con un resultado medible.",
+  //   author: "Nombre y apellido",
+  //   role: "Cargo, Empresa",
+  //   initials: "NA",
+  // },
+];
 
 export const faqs = [
   {
